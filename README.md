@@ -61,7 +61,45 @@ Vemos que el consumo de CPU de ha reducido.
 
    ![](img/usoBajo.png)
 
+3. Consumidor lento y productor rápido
 
+La implementación es muy parecida a la del punto 2, pero el que va a esperar es el productor. 
+El productor espera a que haya espacio.  
+
+***PRODUCTOR***
+
+  ```
+  if(stockLimit>queue.size()){
+      dataSeed = dataSeed + rand.nextInt(100);
+      System.out.println("Producer added " + dataSeed);
+      queue.add(dataSeed);
+  }else{
+      synchronized(queue){
+            try {
+                queue.wait();
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
+      }
+  }
+
+  ```
+
+
+***CONSUMIDOR***
+
+  ```
+  synchronized(queue){
+      if (queue.size() > 0) {
+          int elem=queue.poll();
+          System.out.println("Consumer consumes "+elem); 
+          queue.notify();                              
+      }
+  }
+  ```
+
+![](img/usoBajoP2.png)
+Vemos que el consumo de CPU se ha mantenido bajo.
 ## Construido con
 
 * [Maven](https://maven.apache.org/) - Manejo de dependencias
