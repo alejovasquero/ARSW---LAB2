@@ -19,13 +19,10 @@ public class StartProduction {
     
     
     public static void main(String[] args) {
-        
-        Long value = 4L;
+    
+        int stockLimit = 3;
 
-        //long stockLimit = Long.MAX_VALUE;
-        long stockLimit = 5;
-
-        Queue<Integer> queue=new LinkedBlockingQueue<>();
+        Queue<Integer> queue=new LinkedBlockingQueue<>(stockLimit);
     
         new Producer(queue,stockLimit).start();
         
