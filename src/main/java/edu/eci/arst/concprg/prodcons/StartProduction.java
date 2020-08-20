@@ -20,10 +20,14 @@ public class StartProduction {
     
     public static void main(String[] args) {
         
+        Long value = 4L;
+
+        //long stockLimit = Long.MAX_VALUE;
+        long stockLimit = 5;
+
         Queue<Integer> queue=new LinkedBlockingQueue<>();
-        
-        
-        new Producer(queue,Long.MAX_VALUE).start();
+    
+        new Producer(queue,stockLimit).start();
         
         //let the producer create products for 5 seconds (stock).
         try {
