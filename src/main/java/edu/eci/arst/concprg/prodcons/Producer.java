@@ -31,7 +31,6 @@ public class Producer extends Thread {
     @Override
     public void run() {
         while (true) {
-
             dataSeed = dataSeed + rand.nextInt(100);
             System.out.println("Producer added " + dataSeed);
             queue.add(dataSeed);
@@ -41,7 +40,6 @@ public class Producer extends Thread {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }
 }
