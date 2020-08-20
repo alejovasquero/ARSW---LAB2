@@ -1,0 +1,10 @@
+target/
+out/
+.idea/
+.idea_modules/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.code-workspace
+.DS_Store
