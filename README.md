@@ -100,9 +100,48 @@ El productor espera a que haya espacio.
 
 ![](img/usoBajoP2.png)
 Vemos que el consumo de CPU se ha mantenido bajo.
+
+
+____________
+
+
+#### Part II - JAVA IMMORTALS
+
+RESPUESTAS
+
+1. Para N jugadores, ¿Cuál debería ser la suma de las vidas de los jugadores según el invariante?
+
+De manera general, siendo N los jugadores y ***health*** la vida.
+
+Vida total: ***N*** x ***health***
+
+De manera especifica: N x 100
+
+2. Verificación del invariante
+
+    __PAUSA 1__
+    
+    ![](img/IMMORTALS/invarianteMal1.PNG)   
+    
+    __PAUSA 2__
+        
+    ![](img/IMMORTALS/invarianteMal2.PNG)  
+    
+    __PAUSA 3__
+            
+    ![](img/IMMORTALS/invarianteMal3.PNG)  
+    
+Vemos que el invariante no se cumple :anguished:
+
+
+
+
+
+____________
 ## Construido con
 
 * [Maven](https://maven.apache.org/) - Manejo de dependencias
+
 
 
 ## Contribuciones
