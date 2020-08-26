@@ -18,7 +18,7 @@ ____________
     que esperen a que un recurso se libere no deben hacer uso 
     de cómputo. 
     
-      ```
+      ```java
     while (true) {
                 if (queue.size() > 0) {
                     int elem=queue.poll();
@@ -30,7 +30,7 @@ ____________
 2. El consumo de CPU se va a mejorar a través del uso de wait() y notify() sobre la cola, de
 modo de que el consumidor no consuma recursos mientras la cola está vacía.
 
-    ```
+    ```java
     synchronized(queue){
         if (queue.size() > 0) {
             int elem=queue.poll();
@@ -52,7 +52,7 @@ hay elementos sobre la cola.
 Del lado del productor, cada vez que insertemos nuevos elementos el la cola, notificamos
 a los hilos que estén esperando por este recurso.
       
-   ```
+   ```java
     synchronized(queue){
         queue.notify();
     }
@@ -68,7 +68,7 @@ El productor espera a que haya espacio.
 
 ***PRODUCTOR***
 
-  ```
+  ```java
   if(stockLimit>queue.size()){
       dataSeed = dataSeed + rand.nextInt(100);
       System.out.println("Producer added " + dataSeed);
@@ -88,7 +88,7 @@ El productor espera a que haya espacio.
 
 ***CONSUMIDOR***
 
-  ```
+  ```java
   synchronized(queue){
       if (queue.size() > 0) {
           int elem=queue.poll();
@@ -149,6 +149,46 @@ Vemos que el invariante no se cumple :anguished:
     ![](img/IMMORTALS/invarianteRound2-3.PNG)  
     
 Vemos que el invariante no se cumple :neutral_face: aún
+
+4. Identificación y solución de regiones críticas
+
+Una región crítica que debe ser protegida con exclusión mutua es la pelea entre inmortales en el método ***fight***.
+
+  ```java
+if (i2.getHealth() > 0) {
+    i2.changeHealth(i2.getHealth() - defaultDamageValue);
+    this.health += defaultDamageValue;
+    updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
+} else {
+    updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+}
+  ```
+
+Vamos a hacer la solución a través de un bloque sincronizado anidado.
+
+5. Deadlock de inmortales
+
+Vemos gracias a jstack, que ha habido un bloque mutuo entre threads.
+  
+  ```console
+jstack -l 16008
+  ```
+Dos threads están esperando por un monitor que ya poseen, por lo que se quedan esperando por siempre.
+
+  ```
+"im0":
+        at edu.eci.arsw.highlandersim.Immortal.fight(Immortal.java:80)
+        - waiting to lock <0x00000000c4fa06f8> (a edu.eci.arsw.highlandersim.Immortal)
+        - locked <0x00000000c4f9d180> (a edu.eci.arsw.highlandersim.Immortal)
+        at edu.eci.arsw.highlandersim.Immortal.run(Immortal.java:68)
+"im1":
+        at edu.eci.arsw.highlandersim.Immortal.fight(Immortal.java:80)
+        - waiting to lock <0x00000000c4f9d180> (a edu.eci.arsw.highlandersim.Immortal)
+        - locked <0x00000000c4fa06f8> (a edu.eci.arsw.highlandersim.Immortal)
+        at edu.eci.arsw.highlandersim.Immortal.run(Immortal.java:68)
+  ```
+
+6. Mejora de la implementación.
 ____________
 ## Construido con
 

@@ -168,13 +168,11 @@ public class ControlFrame extends JFrame {
         for (Immortal im : immortals) {
             im.pause();
         }
-
         for (Immortal im : immortals) {
-            synchronized (im) {
+            synchronized (im.getPauseLock()) {
                 if (!im.isTotallyPaused()) {
-                    System.out.println("Waiting");
                     try {
-                        im.wait();
+                        im.getPauseLock().wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

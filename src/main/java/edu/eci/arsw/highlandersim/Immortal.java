@@ -19,6 +19,9 @@ public class Immortal extends Thread {
 
     private boolean pause = false;
 
+    private Object pauseLock = new Object();
+
+
     private boolean totallyPaused = false;
 
 
@@ -37,9 +40,12 @@ public class Immortal extends Thread {
             synchronized (this) {
                 while(pause){
                     try {
-                        totallyPaused = true;
-                        this.notify();
+                        synchronized (pauseLock){
+                            totallyPaused = true;
+                            pauseLock.notify();
+                        }
                         this.wait();
+                        System.out.println("VOLVIENDO");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -69,15 +75,17 @@ public class Immortal extends Thread {
     }
 
     public void fight(Immortal i2) {
-
-        if (i2.getHealth() > 0) {
-            i2.changeHealth(i2.getHealth() - defaultDamageValue);
-            this.health += defaultDamageValue;
-            updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
-        } else {
-            updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+        synchronized (this) {
+            synchronized (i2) {
+                if (i2.getHealth() > 0) {
+                    i2.changeHealth(i2.getHealth() - defaultDamageValue);
+                    this.health += defaultDamageValue;
+                    updateCallback.processReport("Fight: " + this + " vs " + i2 + "\n");
+                } else {
+                    updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+                }
+            }
         }
-
     }
 
     public void changeHealth(int v) {
@@ -97,15 +105,20 @@ public class Immortal extends Thread {
 
     public synchronized void pause(){
         pause = true;
+        this.notifyAll();
     }
 
     public synchronized void continuar(){
         pause = false;
-        this.notify();
+        this.notifyAll();
     }
 
 
     public boolean isTotallyPaused(){
         return totallyPaused;
+    }
+
+    public Object getPauseLock(){
+        return pauseLock;
     }
 }
