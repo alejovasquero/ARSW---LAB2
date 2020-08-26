@@ -91,14 +91,15 @@ public class ControlFrame extends JFrame {
                 /*
 				 * COMPLETAR
                  */
+                pauseAll();
                 int sum = 0;
                 for (Immortal im : immortals) {
                     sum += im.getHealth();
                 }
 
                 statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
-                
-                
+
+
 
             }
         });
@@ -108,9 +109,9 @@ public class ControlFrame extends JFrame {
 
         btnResume.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                /**
-                 * IMPLEMENTAR
-                 */
+                for (Immortal im : immortals) {
+                    im.continuar();
+                }
 
             }
         });
@@ -161,6 +162,25 @@ public class ControlFrame extends JFrame {
             return null;
         }
 
+    }
+
+    public void pauseAll(){
+        for (Immortal im : immortals) {
+            im.pause();
+        }
+
+        for (Immortal im : immortals) {
+            synchronized (im) {
+                if (!im.isTotallyPaused()) {
+                    System.out.println("Waiting");
+                    try {
+                        im.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
 }

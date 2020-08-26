@@ -134,9 +134,21 @@ De manera especifica: N x 100
 Vemos que el invariante no se cumple :anguished:
 
 
-
-
-
+3. Invariante luego de implementar la pausa ***COMPLETA*** de threads.
+ 
+    __PAUSA 1__
+    
+    ![](img/IMMORTALS/invarianteRound2-1.PNG)   
+    
+    __PAUSA 2__
+        
+    ![](img/IMMORTALS/invarianteRound2-2.PNG)  
+    
+    __PAUSA 3__
+            
+    ![](img/IMMORTALS/invarianteRound2-3.PNG)  
+    
+Vemos que el invariante no se cumple :neutral_face: aún
 ____________
 ## Construido con
 
