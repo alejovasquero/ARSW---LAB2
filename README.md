@@ -6,6 +6,26 @@
 - Michael Jefferson Ballesteros Coca
 
 ____________
+#### Instalación
+
+Vamos a compilar el código con maven.
+   ```console
+mvn compile
+   ```
+
+
+Para ejecutar la aplicación.
+
+  ```console
+mvn exec:java -Dexec.mainClass="edu.eci.arsw.highlandersim.ControlFrame"
+   ```
+
+Para ejecutar las pruebas
+
+  ```console
+mvn test
+   ```
+____________
 
 #### Part I - Before finishing class
 
@@ -117,7 +137,7 @@ Vida total: ***N*** x ***health***
 
 De manera especifica: N x 100
 
-2. Verificación del invariante
+2.Verificación del invariante
 
     __PAUSA 1__
     
@@ -134,7 +154,7 @@ De manera especifica: N x 100
 Vemos que el invariante no se cumple :anguished:
 
 
-3. Invariante luego de implementar la pausa ***COMPLETA*** de threads.
+3.Invariante luego de implementar la pausa ***COMPLETA*** de threads.
  
     __PAUSA 1__
     
@@ -150,7 +170,7 @@ Vemos que el invariante no se cumple :anguished:
     
 Vemos que el invariante no se cumple :neutral_face: aún
 
-4. Identificación y solución de regiones críticas
+4.Identificación y solución de regiones críticas
 
 Una región crítica que debe ser protegida con exclusión mutua es la pelea entre inmortales en el método ***fight***.
 
@@ -166,7 +186,7 @@ if (i2.getHealth() > 0) {
 
 Vamos a hacer la solución a través de un bloque sincronizado anidado.
 
-5. Deadlock de inmortales
+5.Deadlock de inmortales
 
 Vemos gracias a jstack, que ha habido un bloque mutuo entre threads.
   
@@ -188,12 +208,18 @@ Dos threads están esperando por un monitor que ya poseen, por lo que se quedan 
         at edu.eci.arsw.highlandersim.Immortal.run(Immortal.java:68)
   ```
 
-6. Mejora de la implementación.
+6.Implementación con lista concurrente
+
+Al eliminar elementos de manera concurrente, sube la posibilidad de acceder a indices vacíos del arreglo.
+
+   ![](img/IMMORTALS/PROBLEMALIST.PNG) 
+   
+Entre más inmortales haya, más accesos aleatorios se harán en la lista, pero al mismo tiempo se eliminan elementos.
+Se debe controlar los accesos a la lista con excepciones si no se quiere hacer sincronización.
 ____________
 ## Construido con
 
 * [Maven](https://maven.apache.org/) - Manejo de dependencias
-
 
 
 ## Contribuciones
